@@ -1,33 +1,23 @@
 
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import style from './Modal.module.css'
 
-export default class Modal extends Component {
-  static propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    largeImage: PropTypes.string.isRequired,
+export default function Modal({ toggleModal, largeImage }) {
+  useEffect(() => {
+    const handleKeyDown = event =>  event.code === 'Escape' && toggleModal() ;
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    };
+  }, [toggleModal]);
+
+  
+  const handleBackdropClick = event => {
+    event.target === event.currentTarget && toggleModal();
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = e => {
-    e.code === 'Escape' && this.props.toggleModal();
-  };
-
-  handleBackdropClick = e => {
-    e.target === e.currentTarget && this.props.toggleModal();
-  };
-
-  render() {
-    const { handleBackdropClick } = this;
-    const { largeImage } = this.props;
+ 
     return (
       <div className={style.Overlay} onClick={handleBackdropClick}>
         <div className={style.Modal}>
@@ -35,5 +25,10 @@ export default class Modal extends Component {
         </div>
       </div>
     );
-  }
-}
+  
+};
+
+Modal.propTypes = {
+  toggleModal: PropTypes.func,
+  largeImage: PropTypes.string,
+};
