@@ -1,5 +1,4 @@
 
-import PropTypes from 'prop-types';
 import axios from 'axios';
 
 export default function requestImg(searchQuery, page) {
@@ -8,9 +7,4 @@ export default function requestImg(searchQuery, page) {
     );
     return response;
 }
-
-requestImg.propTypes = {
-    searchQuery: PropTypes.string.isRequired,
-    page: PropTypes.number.isRequired,
-};
 
